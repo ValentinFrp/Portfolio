@@ -20,7 +20,9 @@ export const site = {
     "I build web products end to end, and the machine-learning systems behind them.",
   email: "valou.frappart@gmail.com",
   location: "France",
-  availability: "Available for freelance work",
+  contactTitle: "Let's talk",
+  contactBlurb:
+    "Tell me what you want to build, from a full product to a single model in production.",
   links: [
     { label: "GitHub", href: "#" },
     { label: "LinkedIn", href: "#" },

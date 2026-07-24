@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { introState } from "@/lib/introState";
@@ -62,7 +62,7 @@ const vertexShader = /* glsl */ `
     float size = mix(12.0, 27.0, min(aSignal, 1.0));
     gl_PointSize = size * max(s, 0.15) / max(-mv.z, 0.1);
     vSignal = aSignal;
-    vAlpha = mix(0.12, 0.55 + 0.45 * g, s);
+    vAlpha = mix(0.12, mix(0.6, 0.3, g), s);
   }
 `;
 
@@ -178,7 +178,7 @@ function Particles({ reducedMotion }: { reducedMotion: boolean }) {
   const progressRef = useRef(0);
   const spawnRef = useRef(0);
 
-  const geometry = useMemo(buildGeometry, []);
+  const geometry = useMemo(() => buildGeometry(), []);
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
@@ -197,7 +197,8 @@ function Particles({ reducedMotion }: { reducedMotion: boolean }) {
 
     const doc = document.documentElement;
     const maxScroll = doc.scrollHeight - window.innerHeight;
-    const scrollTarget = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    const scrollTarget =
+      maxScroll > 0 ? Math.min(window.scrollY / (maxScroll * 0.6), 1) : 0;
 
     if (reducedMotion) {
       material.uniforms.uSpawn.value = introState.done ? 1 : 0;
@@ -240,16 +241,18 @@ function Particles({ reducedMotion }: { reducedMotion: boolean }) {
   );
 }
 
-export default function ParticleField() {
-  const [reducedMotion, setReducedMotion] = useState(false);
+function subscribeReducedMotion(callback: () => void) {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
 
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(query.matches);
-    const onChange = (event: MediaQueryListEvent) => setReducedMotion(event.matches);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
+export default function ParticleField() {
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false
+  );
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden>
