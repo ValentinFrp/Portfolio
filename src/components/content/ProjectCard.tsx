@@ -40,7 +40,7 @@ function CardBody({ project, eyebrow }: { project: Project; eyebrow?: string }) 
       </ul>
       {project.href ? (
         <span className="mt-6 inline-block font-mono text-sm text-slate transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-signal">
-          visit ↗
+          Visit ↗
         </span>
       ) : (
         <span className="mt-6 inline-block font-mono text-xs tracking-widest text-slate/70 uppercase">

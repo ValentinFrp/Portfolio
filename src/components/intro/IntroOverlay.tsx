@@ -167,7 +167,7 @@ export default function IntroOverlay() {
         onClick={skip}
         className="pointer-events-auto absolute bottom-8 left-8 cursor-pointer font-mono text-xs text-slate/60 transition-colors hover:text-slate"
       >
-        skip ↵
+        Skip ↵
       </button>
     </div>
   );

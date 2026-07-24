@@ -73,12 +73,12 @@ export default function Journey() {
 }
 
 const STATIONS = [
-  { label: "start", href: "#top" },
-  { label: "capabilities", href: "#capabilities" },
-  { label: "project 01", href: "#project-1" },
-  { label: "project 02", href: "#project-2" },
-  { label: "project 03", href: "#project-3" },
-  { label: "contact", href: "#contact" },
+  { label: "Start", href: "#top" },
+  { label: "Capabilities", href: "#capabilities" },
+  { label: "Project 01", href: "#project-1" },
+  { label: "Project 02", href: "#project-2" },
+  { label: "Project 03", href: "#project-3" },
+  { label: "Contact", href: "#contact" },
 ];
 
 function stationIndex(time: number) {

@@ -27,14 +27,14 @@ export default function Hero() {
           href="#work"
           className="rounded-full border border-signal/40 px-5 py-2.5 tracking-widest text-signal transition-colors hover:bg-signal/10"
         >
-          see projects
+          See projects
         </a>
       </div>
       <div
         data-hero
         className="absolute bottom-10 flex flex-col items-center gap-3 opacity-0"
       >
-        <span className="font-mono text-xs text-slate">scroll to explore</span>
+        <span className="font-mono text-xs text-slate">Scroll to explore</span>
         <span className="h-10 w-px animate-pulse bg-gradient-to-b from-signal to-transparent" />
       </div>
     </section>

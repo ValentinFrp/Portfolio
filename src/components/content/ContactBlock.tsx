@@ -34,7 +34,7 @@ export default function ContactBlock() {
               rel="noreferrer"
               className="text-slate transition-colors hover:text-signal"
             >
-              {link.label.toLowerCase()}
+              {link.label}
             </a>
           </li>
         ))}
