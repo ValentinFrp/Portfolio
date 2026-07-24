@@ -19,7 +19,10 @@ export default function Hero() {
       <p data-hero className="mt-8 max-w-lg text-slate opacity-0">
         {site.tagline}
       </p>
-      <div data-hero className="mt-10 flex gap-6 font-mono text-xs opacity-0">
+      <div
+        data-hero
+        className="pointer-events-auto mt-10 flex gap-6 font-mono text-xs opacity-0"
+      >
         <a
           href="#work"
           className="rounded-full border border-signal/40 px-5 py-2.5 tracking-widest text-signal transition-colors hover:bg-signal/10"
