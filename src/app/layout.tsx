@@ -20,11 +20,13 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: `${site.name} · ${site.role}`,
   description: site.tagline,
   openGraph: {
     title: `${site.name} · ${site.role}`,
     description: site.tagline,
+    url: site.url,
     type: "website",
   },
 };

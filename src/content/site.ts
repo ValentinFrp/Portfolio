@@ -15,6 +15,7 @@ export type PipelineStage = {
 };
 
 export const site = {
+  url: "https://portfolio-navy-mu-88.vercel.app",
   name: "Valentin Frappart",
   role: "Full-stack developer & ML engineer",
   tagline:
