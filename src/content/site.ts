@@ -68,6 +68,7 @@ export const projects: Project[] = [
       "FinOps platform for private cloud and data centers, built at Lota.Cloud. Where classic FinOps tools stop at public cloud, Finexus prices every VM on VMware, Nutanix, Proxmox or Hyper-V from real CAPEX and OPEX costs in the FOCUS standard: cost per VM split across compute, storage and network, chargeback per team or client, budgets, alerts, forecasts and capacity planning. Native multi-client support for IT teams and MSPs.",
     stack: ["FinOps", "FOCUS standard", "Multi-tenant SaaS"],
     href: "https://finexus-website-prod.s3-website.fr-par.scw.cloud/",
+    image: "/projects/finexus.jpg",
   },
   {
     title: "BlackHoleSimu",
