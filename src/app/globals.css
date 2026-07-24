@@ -45,6 +45,18 @@ body {
   outline-offset: 3px;
 }
 
+[data-station-link].is-active [data-station-dot] {
+  background: var(--signal);
+  border-color: var(--signal);
+  box-shadow: 0 0 12px rgba(161, 107, 255, 0.9);
+  transform: scale(1.3);
+}
+
+[data-station-link].is-active [data-station-label] {
+  opacity: 1;
+  color: var(--signal);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

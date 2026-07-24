@@ -26,7 +26,10 @@ export default function SmoothScroll() {
       );
       if (!anchor) return;
       event.preventDefault();
-      lenis.scrollTo(anchor.getAttribute("href") as string, { offset: -40 });
+      lenis.scrollTo(anchor.getAttribute("href") as string, {
+        offset: -40,
+        duration: 1.4,
+      });
     };
     document.addEventListener("click", onAnchorClick);
 

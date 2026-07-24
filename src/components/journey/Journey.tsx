@@ -46,7 +46,7 @@ export default function Journey() {
     return (
       <main>
         <Hero />
-        <section className="mx-auto max-w-6xl px-6 py-28">
+        <section id="capabilities" className="mx-auto max-w-6xl px-6 py-28">
           <CapabilityCards />
         </section>
         <section id="work" className="mx-auto max-w-6xl px-6 py-28">
@@ -70,6 +70,24 @@ export default function Journey() {
   }
 
   return <JourneyExperience />;
+}
+
+const STATIONS = [
+  { label: "start", href: "#top" },
+  { label: "capabilities", href: "#capabilities" },
+  { label: "project 01", href: "#project-1" },
+  { label: "project 02", href: "#project-2" },
+  { label: "project 03", href: "#project-3" },
+  { label: "contact", href: "#contact" },
+];
+
+function stationIndex(time: number) {
+  if (time < 1.6) return 0;
+  if (time < 4.2) return 1;
+  if (time < 5.85) return 2;
+  if (time < 7.6) return 3;
+  if (time < 9.0) return 4;
+  return 5;
 }
 
 function JourneyExperience() {
@@ -106,6 +124,8 @@ function JourneyExperience() {
             ? SplitText.create(contactHeading, { type: "chars", mask: "chars" })
             : null;
 
+          const navLinks = root.querySelectorAll("[data-station-link]");
+
           const tl = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
@@ -113,6 +133,12 @@ function JourneyExperience() {
               start: "top top",
               end: "bottom bottom",
               scrub: 1,
+              onUpdate: (self) => {
+                const active = stationIndex(self.progress * 10);
+                navLinks.forEach((link, index) =>
+                  link.classList.toggle("is-active", index === active)
+                );
+              },
             },
           });
 
@@ -269,8 +295,41 @@ function JourneyExperience() {
           </div>
         </div>
       </div>
+      <nav
+        data-hero
+        aria-label="Journey stations"
+        className="fixed top-1/2 right-5 z-40 -translate-y-1/2 opacity-0 sm:right-8"
+      >
+        <div className="relative flex flex-col gap-6">
+          <span className="absolute top-1 right-[3.5px] bottom-1 w-px bg-line" aria-hidden />
+          {STATIONS.map((station, index) => (
+            <a
+              key={station.href}
+              href={station.href}
+              data-station-link
+              className={`group relative flex items-center justify-end gap-3${index === 0 ? " is-active" : ""}`}
+            >
+              <span
+                data-station-label
+                className="font-mono text-[10px] tracking-widest text-slate uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              >
+                {station.label}
+              </span>
+              <span
+                data-station-dot
+                className="h-2 w-2 rounded-full border border-slate/60 bg-ink transition-all duration-300"
+              />
+            </a>
+          ))}
+        </div>
+      </nav>
       <div data-spacer className="relative h-[900vh]">
-        <div id="work" className="absolute top-[46%]" />
+        <div id="top" className="absolute top-0" />
+        <div id="capabilities" className="absolute top-[27%]" />
+        <div id="work" className="absolute top-[44%]" />
+        <div id="project-1" className="absolute top-[44%]" />
+        <div id="project-2" className="absolute top-[59%]" />
+        <div id="project-3" className="absolute top-[74%]" />
         <div id="contact" className="absolute top-[90%]" />
       </div>
     </div>
