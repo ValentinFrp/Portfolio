@@ -5,6 +5,7 @@ export type Project = {
   stack: string[];
   href: string | null;
   note?: string;
+  image?: string;
 };
 
 export type PipelineStage = {
@@ -75,6 +76,7 @@ export const projects: Project[] = [
       "Real-time Schwarzschild black hole renderer. Every pixel is ray-cast through curved spacetime using a precomputed deflection table, feeding a physically based accretion disk: Doppler beaming, gravitational redshift and blackbody emission, finished by an HDR pipeline with bloom, ACES and SSAA. One Rust codebase, two targets: native and WebAssembly.",
     stack: ["Rust", "wgpu", "WGSL", "WebAssembly"],
     href: "https://github.com/ValentinFrp/BlackHoleSimu",
+    image: "/projects/blackholesimu.jpg",
   },
   {
     title: "Cloud Cost Anomaly Detection",

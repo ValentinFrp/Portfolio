@@ -1,8 +1,20 @@
+import Image from "next/image";
 import type { Project } from "@/content/site";
 
 function CardBody({ project, eyebrow }: { project: Project; eyebrow?: string }) {
   return (
     <>
+      {project.image ? (
+        <div className="relative -mx-2 -mt-2 mb-2 aspect-video overflow-hidden rounded-xl border border-line">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            sizes="(max-width: 640px) 90vw, 448px"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      ) : null}
       {eyebrow ? (
         <p className="font-mono text-xs tracking-widest text-signal uppercase">
           {eyebrow}
