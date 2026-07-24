@@ -1,17 +1,8 @@
 import type { Project } from "@/content/site";
 
-export default function ProjectCard({
-  project,
-  eyebrow,
-}: {
-  project: Project;
-  eyebrow?: string;
-}) {
+function CardBody({ project, eyebrow }: { project: Project; eyebrow?: string }) {
   return (
-    <a
-      href={project.href}
-      className="group block max-w-md rounded-2xl border border-line bg-raise/70 p-8 backdrop-blur-md transition-colors hover:border-signal/40"
-    >
+    <>
       {eyebrow ? (
         <p className="font-mono text-xs tracking-widest text-signal uppercase">
           {eyebrow}
@@ -35,9 +26,45 @@ export default function ProjectCard({
           </li>
         ))}
       </ul>
-      <span className="mt-6 inline-block font-mono text-sm text-slate transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-signal">
-        visit ↗
-      </span>
+      {project.href ? (
+        <span className="mt-6 inline-block font-mono text-sm text-slate transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-signal">
+          visit ↗
+        </span>
+      ) : (
+        <span className="mt-6 inline-block font-mono text-xs tracking-widest text-slate/70 uppercase">
+          {project.note}
+        </span>
+      )}
+    </>
+  );
+}
+
+export default function ProjectCard({
+  project,
+  eyebrow,
+}: {
+  project: Project;
+  eyebrow?: string;
+}) {
+  const className =
+    "group block max-w-md rounded-2xl border border-line bg-raise/70 p-8 backdrop-blur-md transition-colors hover:border-signal/40";
+
+  if (!project.href) {
+    return (
+      <div className={className}>
+        <CardBody project={project} eyebrow={eyebrow} />
+      </div>
+    );
+  }
+
+  return (
+    <a
+      href={project.href}
+      target="_blank"
+      rel="noreferrer"
+      className={className}
+    >
+      <CardBody project={project} eyebrow={eyebrow} />
     </a>
   );
 }

@@ -16,6 +16,15 @@ export function moon2Center(time: number): Vec3 {
   ];
 }
 
+export function blackHoleCenter(time: number): Vec3 {
+  const t = time * 0.1 + 4.0;
+  return [
+    Math.cos(t) * 8.6,
+    Math.sin(t * 0.6 + 2.0) * 0.9,
+    Math.sin(t) * 8.6 * 0.5,
+  ];
+}
+
 const offset =
   (fn: (time: number) => Vec3, d: Vec3) =>
   (time: number): Vec3 => {
@@ -33,14 +42,16 @@ const ORIGIN: Vec3 = [0, 0, 0];
 
 const WAYPOINTS: Waypoint[] = [
   { p: 0, pos: () => [0, 0, 9.5], look: () => ORIGIN },
-  { p: 0.16, pos: () => [0, 0, 4.0], look: () => ORIGIN },
-  { p: 0.3, pos: () => [0, 0, 0.2], look: () => [0, 0, -6] },
-  { p: 0.46, pos: () => [0, 0, -5.2], look: moon1Center },
-  { p: 0.6, pos: offset(moon1Center, [1.7, 0.7, 2.4]), look: moon1Center },
-  { p: 0.68, pos: offset(moon1Center, [-1.2, 0.4, 2.6]), look: moon1Center },
+  { p: 0.13, pos: () => [0, 0, 4.0], look: () => ORIGIN },
+  { p: 0.24, pos: () => [0, 0, 0.2], look: () => [0, 0, -6] },
+  { p: 0.38, pos: () => [0, 0, -5.2], look: moon1Center },
+  { p: 0.47, pos: offset(moon1Center, [1.7, 0.7, 2.4]), look: moon1Center },
+  { p: 0.55, pos: offset(moon1Center, [-1.2, 0.4, 2.6]), look: moon1Center },
+  { p: 0.63, pos: offset(blackHoleCenter, [1.9, 0.6, 2.6]), look: blackHoleCenter },
+  { p: 0.72, pos: offset(blackHoleCenter, [-1.4, 0.9, 2.9]), look: blackHoleCenter },
   { p: 0.8, pos: offset(moon2Center, [-1.5, 0.6, 2.2]), look: moon2Center },
   { p: 0.88, pos: offset(moon2Center, [1.0, 0.8, 2.8]), look: moon2Center },
-  { p: 1, pos: () => [0, 2.6, 12.0], look: () => ORIGIN },
+  { p: 1, pos: () => [0, 2.6, 12.5], look: () => ORIGIN },
 ];
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
@@ -66,7 +77,7 @@ export function cameraState(progress: number, time: number) {
 }
 
 export function tunnelAmount(progress: number) {
-  const rampIn = smooth(clamp01((progress - 0.13) / 0.07));
-  const rampOut = smooth(clamp01((progress - 0.36) / 0.08));
+  const rampIn = smooth(clamp01((progress - 0.1) / 0.06));
+  const rampOut = smooth(clamp01((progress - 0.29) / 0.07));
   return rampIn * (1 - rampOut);
 }

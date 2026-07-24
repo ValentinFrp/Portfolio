@@ -3,7 +3,8 @@ export type Project = {
   year: string;
   description: string;
   stack: string[];
-  href: string;
+  href: string | null;
+  note?: string;
 };
 
 export type PipelineStage = {
@@ -24,9 +25,12 @@ export const site = {
   contactBlurb:
     "Tell me what you want to build, from a full product to a single model in production.",
   links: [
-    { label: "GitHub", href: "#" },
-    { label: "LinkedIn", href: "#" },
-    { label: "Malt", href: "#" },
+    { label: "GitHub", href: "https://github.com/ValentinFrp" },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/valentin-frappart-a73b252b4",
+    },
+    { label: "Malt", href: "https://www.malt.fr/profile/valentinfrappart1" },
   ],
 };
 
@@ -56,19 +60,28 @@ export const pipeline: PipelineStage[] = [
 
 export const projects: Project[] = [
   {
-    title: "Project one",
+    title: "Finexus",
     year: "2026",
     description:
-      "Placeholder: replace with a real project: what it does, who it is for, and the problem it solves.",
-    stack: ["Next.js", "Python", "PostgreSQL"],
-    href: "#",
+      "FinOps platform for private cloud and data centers, built at Lota.Cloud. Where classic FinOps tools stop at public cloud, Finexus prices every VM on VMware, Nutanix, Proxmox or Hyper-V from real CAPEX and OPEX costs in the FOCUS standard: cost per VM split across compute, storage and network, chargeback per team or client, budgets, alerts, forecasts and capacity planning. Native multi-client support for IT teams and MSPs.",
+    stack: ["FinOps", "FOCUS standard", "Multi-tenant SaaS"],
+    href: "https://finexus-website-prod.s3-website.fr-par.scw.cloud/",
   },
   {
-    title: "Project two",
+    title: "BlackHoleSimu",
+    year: "2026",
+    description:
+      "Real-time Schwarzschild black hole renderer. Every pixel is ray-cast through curved spacetime using a precomputed deflection table, feeding a physically based accretion disk: Doppler beaming, gravitational redshift and blackbody emission, finished by an HDR pipeline with bloom, ACES and SSAA. One Rust codebase, two targets: native and WebAssembly.",
+    stack: ["Rust", "wgpu", "WGSL", "WebAssembly"],
+    href: "https://github.com/ValentinFrp/BlackHoleSimu",
+  },
+  {
+    title: "Cloud Cost Anomaly Detection",
     year: "2025",
     description:
-      "Placeholder: replace with a real project: what it does, who it is for, and the problem it solves.",
-    stack: ["PyTorch", "FastAPI", "Docker"],
-    href: "#",
+      "Multi-tenant API that forecasts cloud costs over 7, 14 and 30 days and flags spending anomalies in near real time. Hybrid detection combining statistical tests, Isolation Forest and ETS residuals, one lazily loaded model per tenant per horizon, weekly automated retraining with zero-downtime reloads. About 11% MAPE at 7 days, running in production.",
+    stack: ["Python", "FastAPI", "scikit-learn", "ClickHouse", "MLflow", "Docker"],
+    href: null,
+    note: "internal production system",
   },
 ];

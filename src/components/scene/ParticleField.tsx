@@ -12,13 +12,17 @@ const MOON1_COUNT = 700;
 const MOON2_COUNT = 500;
 const MOON1_RING_COUNT = 260;
 const MOON2_CORE_COUNT = 140;
+const BH_DISK_COUNT = 520;
+const BH_RING_COUNT = 130;
 const COUNT =
   SPHERE_COUNT +
   RING_COUNT +
   MOON1_COUNT +
   MOON2_COUNT +
   MOON1_RING_COUNT +
-  MOON2_CORE_COUNT;
+  MOON2_CORE_COUNT +
+  BH_DISK_COUNT +
+  BH_RING_COUNT;
 const STAR_COUNT = 1600;
 
 const vertexShader = /* glsl */ `
@@ -40,6 +44,12 @@ const vertexShader = /* glsl */ `
     return vec3(p.x * c + p.z * s, p.y, -p.x * s + p.z * c);
   }
 
+  vec3 rotX(vec3 p, float a) {
+    float c = cos(a);
+    float s = sin(a);
+    return vec3(p.x, p.y * c - p.z * s, p.y * s + p.z * c);
+  }
+
   void main() {
     float s = smoothstep(aOffset - 0.15, aOffset, uSpawn);
 
@@ -47,6 +57,8 @@ const vertexShader = /* glsl */ `
     vec3 moon1 = vec3(cos(t1) * 5.6, sin(t1 * 0.7) * 1.1, sin(t1) * 5.6 * 0.55);
     float t2 = -uTime * 0.15 + 0.7;
     vec3 moon2 = vec3(cos(t2) * 7.1, sin(t2 * 0.9 + 1.0) * 1.4, sin(t2) * 7.1 * 0.55);
+    float t3 = uTime * 0.1 + 4.0;
+    vec3 hole = vec3(cos(t3) * 8.6, sin(t3 * 0.6 + 2.0) * 0.9, sin(t3) * 8.6 * 0.5);
 
     vec3 world;
     if (aBody < 0.5) {
@@ -63,9 +75,12 @@ const vertexShader = /* glsl */ `
       world = rotY(breathing, uTime * 0.4) + moon2;
     } else if (aBody < 4.5) {
       world = rotY(position, uTime * 0.85) + moon1;
-    } else {
+    } else if (aBody < 5.5) {
       vec3 pulse = position * (1.0 + 0.3 * sin(uTime * 2.2));
       world = rotY(pulse, uTime * 0.5) + moon2;
+    } else {
+      float spin = aBody < 6.5 ? 1.3 : 1.9;
+      world = rotX(rotY(position, uTime * spin), 1.0) + hole;
     }
 
     vec3 pos = mix(aScatter, world, s);
@@ -80,11 +95,13 @@ const vertexShader = /* glsl */ `
     gl_Position = projectionMatrix * mv;
 
     float size = mix(12.0, 27.0, min(aSignal, 1.0));
-    if (aBody > 4.5) size = 34.0;
+    if (aBody > 4.5 && aBody < 5.5) size = 34.0;
+    if (aBody > 6.5) size = 20.0;
     gl_PointSize = min(size * max(s, 0.15) / max(-mv.z, 0.1), 42.0);
     vSignal = aSignal;
     vBody = aBody;
     vAlpha = mix(0.12, 0.6, s) * (1.0 - uWarp * 0.35);
+    if (aBody > 5.5) vAlpha = min(vAlpha * 1.6, 0.9);
   }
 `;
 
@@ -101,9 +118,11 @@ const fragmentShader = /* glsl */ `
     vec3 violet = vec3(0.63, 0.42, 1.0);
     vec3 magenta = vec3(0.89, 0.31, 0.85);
     bool isMoon1 = (vBody > 1.5 && vBody < 2.5) || (vBody > 3.5 && vBody < 4.5);
-    bool isMoon2 = (vBody > 2.5 && vBody < 3.5) || vBody > 4.5;
+    bool isMoon2 = (vBody > 2.5 && vBody < 3.5) || (vBody > 4.5 && vBody < 5.5);
+    bool isHole = vBody > 5.5;
     if (isMoon1) base = mix(base, violet, 0.4);
     if (isMoon2) base = mix(base, magenta, 0.4);
+    if (isHole) base = vBody > 6.5 ? vec3(1.0, 0.94, 0.98) : vec3(0.96, 0.72, 0.9);
     vec3 accent = mix(violet, magenta, step(1.5, vSignal));
     vec3 color = mix(base, accent, clamp(vSignal, 0.0, 1.0));
     gl_FragColor = vec4(color, a);
@@ -220,6 +239,42 @@ function buildGeometry() {
       locals[i * 3 + 2] = coreR * Math.cos(corePhi);
       bodies[i] = 5;
       offsets[i] = 0.68 + Math.random() * 0.1;
+      signals[i] = 2;
+      continue;
+    } else if (
+      i <
+      SPHERE_COUNT +
+        MOON1_COUNT +
+        MOON2_COUNT +
+        MOON1_RING_COUNT +
+        MOON2_CORE_COUNT +
+        BH_DISK_COUNT
+    ) {
+      const diskA = Math.random() * Math.PI * 2;
+      const diskR = 0.42 + Math.pow(Math.random(), 2.0) * 0.75;
+      locals[i * 3] = Math.cos(diskA) * diskR;
+      locals[i * 3 + 1] = (Math.random() - 0.5) * 0.04;
+      locals[i * 3 + 2] = Math.sin(diskA) * diskR;
+      bodies[i] = 6;
+      offsets[i] = 0.72 + Math.random() * 0.14;
+      accentChance = 0.3;
+    } else if (
+      i <
+      SPHERE_COUNT +
+        MOON1_COUNT +
+        MOON2_COUNT +
+        MOON1_RING_COUNT +
+        MOON2_CORE_COUNT +
+        BH_DISK_COUNT +
+        BH_RING_COUNT
+    ) {
+      const ringA2 = Math.random() * Math.PI * 2;
+      const ringR2 = 0.3 + Math.random() * 0.04;
+      locals[i * 3] = Math.cos(ringA2) * ringR2;
+      locals[i * 3 + 1] = (Math.random() - 0.5) * 0.015;
+      locals[i * 3 + 2] = Math.sin(ringA2) * ringR2;
+      bodies[i] = 7;
+      offsets[i] = 0.76 + Math.random() * 0.1;
       signals[i] = 2;
       continue;
     } else {

@@ -87,12 +87,15 @@ function JourneyExperience() {
           const capsPanel = root.querySelector("[data-panel='caps']");
           const p1Panel = root.querySelector("[data-panel='p1']");
           const p2Panel = root.querySelector("[data-panel='p2']");
+          const p3Panel = root.querySelector("[data-panel='p3']");
           const contactPanel = root.querySelector("[data-panel='contact']");
           if (!spacer || !capsPanel || !contactPanel) return;
 
           const cards = gsap.utils.toArray<HTMLElement>("[data-card]", capsPanel);
           gsap.set(cards, { transformPerspective: 900 });
-          gsap.set([capsPanel, p1Panel, p2Panel, contactPanel], { autoAlpha: 0 });
+          gsap.set([capsPanel, p1Panel, p2Panel, p3Panel, contactPanel], {
+            autoAlpha: 0,
+          });
 
           const capsHeading = capsPanel.querySelector("[data-heading]");
           const capsSplit = capsHeading
@@ -121,12 +124,12 @@ function JourneyExperience() {
             0.2
           );
 
-          tl.fromTo(capsPanel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35 }, 2.0);
+          tl.fromTo(capsPanel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 2.1);
           if (capsSplit) {
             tl.from(
               capsSplit.chars,
-              { yPercent: 115, stagger: 0.02, duration: 0.4 },
-              2.05
+              { yPercent: 115, stagger: 0.02, duration: 0.35 },
+              2.15
             );
           }
           cards.forEach((card, index) => {
@@ -147,10 +150,10 @@ function JourneyExperience() {
                 rotationX: 0,
                 rotationY: 0,
                 scale: 1,
-                duration: 0.7,
+                duration: 0.6,
                 ease: "power2.out",
               },
-              2.15 + index * 0.55
+              2.25 + index * 0.4
             );
             tl.from(
               card.querySelectorAll("[data-chip]"),
@@ -159,59 +162,59 @@ function JourneyExperience() {
                 y: 14,
                 scale: 0.85,
                 stagger: 0.04,
-                duration: 0.25,
+                duration: 0.2,
                 ease: "back.out(1.7)",
               },
-              2.5 + index * 0.55
+              2.55 + index * 0.4
             );
           });
           tl.to(
             capsPanel,
-            { autoAlpha: 0, scale: 0.9, y: -70, duration: 0.5, ease: "power1.in" },
-            4.4
+            { autoAlpha: 0, scale: 0.9, y: -70, duration: 0.45, ease: "power1.in" },
+            3.65
           );
 
-          tl.fromTo(
-            p1Panel,
-            { autoAlpha: 0, x: 160, rotationY: -16, transformPerspective: 900 },
-            { autoAlpha: 1, x: 0, rotationY: 0, duration: 0.6, ease: "power2.out" },
-            5.3
-          );
-          tl.to(
-            p1Panel,
-            { autoAlpha: 0, x: -140, duration: 0.5, ease: "power1.in" },
-            6.7
-          );
-
-          tl.fromTo(
-            p2Panel,
-            { autoAlpha: 0, x: -160, rotationY: 16, transformPerspective: 900 },
-            { autoAlpha: 1, x: 0, rotationY: 0, duration: 0.6, ease: "power2.out" },
-            7.4
-          );
-          tl.to(
-            p2Panel,
-            { autoAlpha: 0, x: 140, duration: 0.5, ease: "power1.in" },
-            8.55
-          );
+          const stations = [
+            { panel: p1Panel, at: 4.45, out: 5.45, from: 1 },
+            { panel: p2Panel, at: 6.1, out: 7.1, from: -1 },
+            { panel: p3Panel, at: 7.85, out: 8.75, from: 1 },
+          ];
+          stations.forEach(({ panel, at, out, from }) => {
+            tl.fromTo(
+              panel,
+              {
+                autoAlpha: 0,
+                x: 160 * from,
+                rotationY: -16 * from,
+                transformPerspective: 900,
+              },
+              { autoAlpha: 1, x: 0, rotationY: 0, duration: 0.5, ease: "power2.out" },
+              at
+            );
+            tl.to(
+              panel,
+              { autoAlpha: 0, x: -140 * from, duration: 0.4, ease: "power1.in" },
+              out
+            );
+          });
 
           tl.fromTo(
             contactPanel,
             { autoAlpha: 0 },
-            { autoAlpha: 1, duration: 0.4 },
-            9.15
+            { autoAlpha: 1, duration: 0.35 },
+            9.25
           );
           if (contactSplit) {
             tl.from(
               contactSplit.chars,
-              { yPercent: 115, stagger: 0.03, duration: 0.4 },
-              9.2
+              { yPercent: 115, stagger: 0.03, duration: 0.35 },
+              9.3
             );
           }
           tl.from(
             contactPanel.querySelectorAll("[data-item]"),
-            { autoAlpha: 0, y: 40, stagger: 0.08, duration: 0.35 },
-            9.35
+            { autoAlpha: 0, y: 40, stagger: 0.08, duration: 0.3 },
+            9.4
           );
         })
       );
@@ -250,6 +253,14 @@ function JourneyExperience() {
           </div>
         </div>
         <div
+          data-panel="p3"
+          className="absolute inset-0 flex items-center justify-end px-[8vw]"
+        >
+          <div className="pointer-events-auto">
+            <ProjectCard project={projects[2]} eyebrow="sector 02 · project 03" />
+          </div>
+        </div>
+        <div
           data-panel="contact"
           className="absolute inset-0 flex items-center justify-center px-6"
         >
@@ -258,9 +269,9 @@ function JourneyExperience() {
           </div>
         </div>
       </div>
-      <div data-spacer className="relative h-[800vh]">
-        <div id="work" className="absolute top-[52%]" />
-        <div id="contact" className="absolute top-[88%]" />
+      <div data-spacer className="relative h-[900vh]">
+        <div id="work" className="absolute top-[46%]" />
+        <div id="contact" className="absolute top-[90%]" />
       </div>
     </div>
   );
