@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #070b12;
-  --raise: #0d131e;
-  --fog: #e8ecf4;
-  --slate: #8b96a8;
-  --signal: #ffb454;
-  --line: rgba(232, 236, 244, 0.08);
+  --ink: #0a0612;
+  --raise: #120b1e;
+  --fog: #f0eaf4;
+  --slate: #968ca8;
+  --signal: #a16bff;
+  --chroma: #e24fd8;
+  --line: rgba(240, 234, 244, 0.08);
 }
 
 @theme inline {
@@ -15,6 +16,7 @@
   --color-fog: var(--fog);
   --color-slate: var(--slate);
   --color-signal: var(--signal);
+  --color-chroma: var(--chroma);
   --color-line: var(--line);
 
   --font-display: var(--font-bricolage);
